@@ -252,6 +252,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ClinicSerializer, DoctorSerializer, PatientSerializer
 from rest_framework import status
+from django.http import JsonResponse
 
 @api_view(['POST'])
 def api_add_clinic(request):
@@ -280,7 +281,7 @@ def api_add_patient(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 @api_view(['GET'])
 def api_clinic_info(request):
     clinics = Clinic.objects.all()
