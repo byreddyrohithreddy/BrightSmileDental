@@ -19,4 +19,5 @@ urlpatterns = [
     path('api/add_clinic/', views.api_add_clinic, name='api_add_clinic'),
     path('api/add_doctor/', views.api_add_doctor, name='api_add_doctor'),
     path('api/add_patient/', views.api_add_patient, name='api_add_patient'),
+    path('api/clinic_info/', views.api_clinic_info, name='api_clinic_info'),
 ]
