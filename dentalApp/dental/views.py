@@ -280,3 +280,23 @@ def api_add_patient(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def api_clinic_info(request):
+    clinics = Clinic.objects.all()
+    clinic_data = []
+
+    for clinic in clinics:
+        clinic_data.append({
+            'id': clinic.id,
+            'name': clinic.name,
+            'phone_number': clinic.phone_number,
+            'city': clinic.city,
+            'state': clinic.state,
+            'address': clinic.address,
+            'email': clinic.email,
+            'doctor_count': clinic.doctor_count(),
+            'patient_count': clinic.patient_count(),
+        })
+
+    return JsonResponse(clinic_data, safe=False)
