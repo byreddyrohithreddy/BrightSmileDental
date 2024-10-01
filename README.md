@@ -119,6 +119,13 @@ Add patient here
 - The below picture depicts the functionality of details to schedule an appointment.
   ![image](https://github.com/user-attachments/assets/f7fb5adc-8fe7-4f57-919b-0d384b783624)
 
+## Rest API:
+- Created Four REST APIs without any affiliations
+- POST /api/add_clinic/
+- POST /api/add_doctor/
+- POST /api/add_patient/
+- GET /api/clinic_info/ 
+
 ## Executing Testcases wrote:
 - Wrote 6 test cases for testing few basic functionalities like add_clinic, add_patient, add_doctor
 - Can execute testcases by running command ```` python manage.py test dental ````
