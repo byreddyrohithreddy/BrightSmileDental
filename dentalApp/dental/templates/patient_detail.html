@@ -1,0 +1,193 @@
+<div class="container">
+    <div class="patient-details">
+        <h1 class="patient-title">{{ patient.name }}</h1>
+        <div class="patient-info">
+            <p><strong>Date of Birth:</strong> {{ patient.date_of_birth }}</p>
+            <p><strong>Phone:</strong> {{ patient.phone_number }}</p>
+            <p><strong>Address:</strong> {{ patient.address }}</p>
+        </div>
+    </div>
+
+    <section class="form-section">
+        <h2>Edit Patient Information</h2>
+        <form method="POST" class="form" id="patient-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary" onclick="return confirmSave()">Save</button>
+        </form>
+    </section>
+
+    <section class="visits-section">
+        <h2>Visits</h2>
+        <ul class="visits-list">
+            {% for visit in visits %}
+            <li class="visit-item">
+                <span class="visit-date">{{ visit.date_time }}</span> with Dr. <strong>{{ visit.doctor.name }}</strong> at <strong>{{ visit.clinic.name }}</strong>
+                <br>
+                <span class="visit-procedures">Procedures Done:</span> {{ visit.procedures_done }}
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="appointment-section">
+        <h2>Next Appointment</h2>
+        {% if next_appointment %}
+        <div class="next-appointment">
+            <p><strong>{{ next_appointment.date }}</strong> with Dr. {{ next_appointment.doctor.name }} at {{ next_appointment.clinic.name }}</p>
+            <p><em>Procedure:</em> {{ next_appointment.procedure }}</p>
+        </div>
+        {% else %}
+        <p>No upcoming appointments</p>
+        {% endif %}
+    </section>
+
+    <div class="actions">
+        <a href="{% url 'schedule_appointment' patient.id %}" class="btn btn-secondary">Schedule Appointment</a>
+    </div>
+</div>
+
+<script>
+    function confirmSave() {
+        return confirm("Are you sure you want to save the changes?");
+    }
+</script>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .patient-title {
+        font-size: 2.2em;
+        color: #007bff;
+        text-align: center;
+    }
+
+    .patient-info {
+        font-size: 1.2em;
+        margin: 15px 0 30px 0;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .patient-info p {
+        margin: 10px 0;
+    }
+
+    h2 {
+        font-size: 1.6em;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .form {
+        display: grid;
+        gap: 15px;
+    }
+
+    .form input, .form textarea, .form select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .visits-section {
+        margin-bottom: 30px;
+    }
+
+    .visits-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .visit-item {
+        background-color: #eef2f7;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .visit-date {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .visit-procedures {
+        font-style: italic;
+        color: #555;
+    }
+
+    .appointment-section {
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: #eef2f7;
+        border-radius: 8px;
+    }
+
+    .next-appointment p {
+        margin: 10px 0;
+    }
+
+    .actions {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .patient-title {
+            font-size: 1.8em;
+        }
+
+        .patient-info {
+            font-size: 1.1em;
+        }
+    }
+</style>

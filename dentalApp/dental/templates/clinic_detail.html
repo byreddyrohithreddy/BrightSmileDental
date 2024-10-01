@@ -1,0 +1,200 @@
+<div class="container">
+    <h1 class="clinic-title">{{ clinic.name }}</h1>
+
+    <section class="clinic-details-section">
+        <h2>Clinic Details</h2>
+        <form method="post" class="clinic-form" id="clinicForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Clinic</button>
+        </form>
+    </section>
+
+    <section class="doctors-section">
+        <h2>Doctors</h2>
+        <table class="doctors-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Specialty</th>
+                    <th>Office Address</th>
+                    <th>Working Schedule</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.name }}</td>
+                    <td>{{ doctor.specialty }}</td>
+
+
+                    <td>
+                        <form method="post" action="{% url 'edit_doctor' doctor.id %}" class="inline-form" id="doctorForm{{ doctor.id }}">
+                            {% csrf_token %}
+                            <input type="text" name="office_address" value="{{ doctor.office_address }}" class="input-field" />
+                            <button type="submit" class="btn btn-secondary save-doctor-btn">Save</button>
+                        </form>
+                    </td>
+
+
+                    <td>
+                        <form method="post" action="{% url 'edit_doctor' doctor.id %}" class="inline-form">
+                            {% csrf_token %}
+                            <input type="text" name="working_schedule" value="{{ doctor.working_schedule }}" class="input-field" />
+                            <button type="submit" class="btn btn-secondary save-doctor-btn">Save</button>
+                        </form>
+                    </td>
+
+ 
+                    <td>
+                        <form method="post" action="{% url 'remove_doctor' doctor.id %}" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="add-doctor-section">
+        <h3>Add Doctor to {{ clinic.name }}</h3>
+        <form method="post" action="{% url 'add_doctor_to_clinic' clinic.id %}" class="add-doctor-form">
+            {% csrf_token %}
+            {{ add_doctor_form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Doctor</button>
+        </form>
+    </section>
+</div>
+
+<script>
+    document.getElementById('clinicForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        alert("Clinic details have been saved!");
+        this.submit(); 
+    });
+
+
+    document.querySelectorAll('.save-doctor-btn').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            alert("Doctor details have been saved!");
+            button.closest('form').submit();
+        });
+    });
+</script>
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .clinic-title {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .clinic-form, .inline-form, .add-doctor-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-field {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+    }
+
+    .doctors-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .doctors-table th, .doctors-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .doctors-table th {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .doctors-table td {
+        background-color: #f9f9f9;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    @media screen and (max-width: 768px) {
+        .doctors-table, .inline-form {
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+        }
+    }
+</style>

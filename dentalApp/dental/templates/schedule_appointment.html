@@ -1,0 +1,179 @@
+<div class="container">
+    <h1>Schedule Appointment for {{ patient.name }}</h1>
+
+    <form method="POST" id="appointment-form">
+        {% csrf_token %}
+        
+        <!-- Select Procedure -->
+        <div class="form-group">
+            <label for="procedure">Procedure:</label>
+            <select name="procedure" id="procedure" class="form-control" onchange="fetchClinics(this.value)">
+                <option value="">--Select Procedure--</option>
+                {% for value, name in procedure_choices %}
+                    <option value="{{ value }}" {% if request.GET.procedure == value %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Select Clinic -->
+        <div class="form-group">
+            <label for="clinic">Clinic:</label>
+            <select name="clinic" id="clinic" class="form-control" {% if not clinics %}disabled{% endif %} onchange="fetchDoctors(this.value)">
+                <option value="">--Select Clinic--</option>
+                {% for clinic in clinics %}
+                    <option value="{{ clinic.id }}" {% if request.GET.clinic == clinic.id|stringformat:"s" %}selected{% endif %}>{{ clinic.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Select Doctor -->
+        <div class="form-group">
+            <label for="doctor">Doctor:</label>
+            <select name="doctor" id="doctor" class="form-control" {% if not doctors %}disabled{% endif %} onchange="fetchAvailableTimeSlots()">
+                <option value="">--Select Doctor--</option>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}" {% if request.GET.doctor == doctor.id|stringformat:"s" %}selected{% endif %}>{{ doctor.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Select Appointment Date -->
+        <div class="form-group">
+            <label for="appointment_date">Appointment Date:</label>
+            <input type="date" name="appointment_date" id="appointment_date" class="form-control" onchange="fetchAvailableTimeSlots()">
+        </div>
+
+        <!-- Available Time Slots -->
+        <div class="form-group">
+            <label for="time_slot">Available Time Slots:</label>
+            <select name="time_slot" id="time_slot" class="form-control">
+                <option value="">--Select Time Slot--</option>
+                {% for time_slot in available_time_slots %}
+                    <option value="{{ time_slot }}" {% if request.GET.time_slot == time_slot %}selected{% endif %}>
+                        {{ time_slot }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+    </form>
+</div>
+
+<script>
+    function fetchClinics(procedureId) {
+        if (procedureId) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('procedure', procedureId);
+            url.searchParams.delete('clinic');
+            url.searchParams.delete('doctor');
+            window.location.href = url.toString();
+        }
+    }
+
+    function fetchDoctors(clinicId) {
+        const procedureId = document.getElementById('procedure').value;
+        if (clinicId && procedureId) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('clinic', clinicId);
+            url.searchParams.delete('doctor');
+            window.location.href = url.toString();
+        }
+    }
+
+    function fetchAvailableTimeSlots() {
+        const doctorId = document.getElementById('doctor').value;
+        const clinicId = document.getElementById('clinic').value;
+        const procedureId = document.getElementById('procedure').value;
+        const appointmentDate = document.getElementById('appointment_date').value;
+    
+        if (doctorId && clinicId && procedureId && appointmentDate) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('doctor', doctorId);
+            url.searchParams.set('appointment_date', appointmentDate);
+    
+            fetch(url.toString())
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const timeSlotSelect = document.getElementById('time_slot');
+
+                    timeSlotSelect.innerHTML = '<option value="">--Select Time Slot--</option>';
+    
+                    console.log('Before appending new options:', timeSlotSelect.innerHTML);
+    
+
+                    const newOptions = doc.querySelectorAll('#time_slot option');
+    
+
+                    const existingValues = new Set(Array.from(timeSlotSelect.options).map(option => option.value));
+    
+  
+                    newOptions.forEach(option => {
+                        const trimmedValue = option.value.trim();
+                        if (trimmedValue && !existingValues.has(trimmedValue)) {
+                            console.log('Appending option:', option.outerHTML); 
+                            timeSlotSelect.appendChild(option.cloneNode(true));
+                            existingValues.add(trimmedValue); 
+                        } else {
+                            console.log('Skipping duplicate or empty option:', trimmedValue);
+                        }
+                    });
+    
+                    console.log('After appending new options:', timeSlotSelect.innerHTML);
+                })
+                .catch(error => console.error('Error fetching available time slots:', error));
+        }
+    }
+    
+    
+    
+</script>
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    label {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+</style>

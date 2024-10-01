@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .patient-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .patient-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .patient-card:hover {
+            transform: scale(1.05);
+        }
+
+        .patient-card h2 {
+            margin: 0 0 10px;
+        }
+
+        .patient-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .add-patient {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e0e0;
+            border: 2px dashed #bbb;
+            color: #666;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-patient:hover {
+            background-color: #d0d0d0;
+        }
+
+        .add-patient a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .patient-info {
+            margin-top: 10px;
+            color: #444;
+        }
+
+        .patient-info span {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Patients</h1>
+
+    <ul class="patient-container">
+        {% for patient in patients %}
+        <li class="patient-card">
+            <h2><a href="{% url 'patient_detail' patient.id %}">{{ patient.name }}</a></h2>
+            <div class="patient-info">
+                <span><strong>Date of Birth:</strong> {{ patient.date_of_birth }}</span>
+
+                <span><strong>Last Visit Date:</strong>
+                    {% if patient.last_visit %}
+                        {{ patient.last_visit.date_time }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </span>
+
+                <span><strong>Last Visit Doctor:</strong>
+                    {% if patient.last_visit %}
+                        {{ patient.last_visit.doctor.name }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </span>
+
+                <span><strong>Next Appointment Date:</strong>
+                    {% if patient.next_appointment %}
+                        {{ patient.next_appointment.date }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </span>
+
+                <span><strong>Next Appointment Doctor:</strong>
+                    {% if patient.next_appointment %}
+                        {{ patient.next_appointment.doctor.name }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </span>
+            </div>
+        </li>
+        {% endfor %}
+
+        <li class="patient-card add-patient">
+            <a href="{% url 'add_patient' %}">
+                + Add Patient
+            </a>
+        </li>
+    </ul>
+
+</body>
+</html>

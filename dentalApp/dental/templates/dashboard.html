@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Bright Smile Dental Management</h2>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="clinics-tab" data-bs-toggle="tab" href="#clinics" role="tab" aria-controls="clinics" aria-selected="true">Clinics</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="doctors-tab" data-bs-toggle="tab" href="#doctors" role="tab" aria-controls="doctors" aria-selected="false">Doctors</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="patients-tab" data-bs-toggle="tab" href="#patients" role="tab" aria-controls="patients" aria-selected="false">Patients</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade show active" id="clinics" role="tabpanel" aria-labelledby="clinics-tab">
+                <h3>Clinics</h3>
+                <a href="{% url 'clinic_list' %}" class="btn btn-primary">View All Clinics</a>
+            </div>
+
+            <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
+                <h3>Doctors</h3>
+                <a href="{% url 'doctor_list' %}" class="btn btn-primary">View All Doctors</a>
+            </div>
+
+            <div class="tab-pane fade" id="patients" role="tabpanel" aria-labelledby="patients-tab">
+                <h3>Patients</h3>
+                <a href="{% url 'patient_list' %}" class="btn btn-primary">View All Patients</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="doctor-header">
+        <h1>{{ doctor.name }}</h1>
+        <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+        <p><strong>Office Address:</strong> {{ doctor.office_address }}</p>
+    </div>
+
+    <div class="doctor-details">
+        <h2>Doctor Details</h2>
+        <form method="post" onsubmit="showSavePrompt(event)">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+
+    <div class="affiliated-clinics">
+        <h2>Affiliated Clinics</h2>
+        <ul>
+            {% for clinic in doctor.clinic.all %}
+            <li>{{ clinic.name }} - {{ clinic.address }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="doctor-patients">
+        <h2>Patients</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of Birth</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.date_of_birth }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function showSavePrompt(event) {
+        alert('Doctor details have been saved successfully!');
+    }
+</script>
+
+<style>
+    .container {
+        padding: 20px;
+    }
+    .doctor-header {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .doctor-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .doctor-header p {
+        margin: 5px 0;
+        font-size: 1.2em;
+    }
+    .doctor-details,
+    .affiliated-clinics,
+    .doctor-patients {
+        margin-bottom: 30px;
+    }
+    h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1.1em;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .table th, .table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .table th {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+</style>

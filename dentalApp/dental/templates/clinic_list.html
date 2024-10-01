@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .clinic-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .clinic-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .clinic-card:hover {
+            transform: scale(1.05);
+        }
+
+        .clinic-card h2 {
+            margin: 0 0 10px;
+        }
+
+        .clinic-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .add-clinic {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e0e0;
+            border: 2px dashed #bbb;
+            color: #666;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-clinic:hover {
+            background-color: #d0d0d0;
+        }
+
+        .add-clinic a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .clinic-info {
+            margin-top: 10px;
+            color: #444;
+        }
+
+        .clinic-info span {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clinics</h1>
+
+    <ul class="clinic-container">
+        {% for clinic in clinics %}
+        <li class="clinic-card">
+            <h2><a href="{% url 'clinic_detail' clinic.id %}">{{ clinic.name }}</a></h2>
+            <p>{{ clinic.city }}, {{ clinic.state }}</p>
+            <div class="clinic-info">
+                <span><strong>Phone:</strong> {{ clinic.phone_number }}</span>
+                <span><strong>Doctors:</strong> {{ clinic.doctor_count }}</span>
+                <span><strong>Patients:</strong> {{ clinic.patient_count }}</span>
+            </div>
+        </li>
+        {% endfor %}
+
+        <li class="clinic-card add-clinic">
+            <a href="{% url 'add_clinic' %}">
+                + Add Clinic
+            </a>
+        </li>
+    </ul>
+
+</body>
+</html>
