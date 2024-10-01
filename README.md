@@ -137,7 +137,12 @@ Add patient here
 
 ## References:
 - https://realpython.com/django-setup/#install-django-and-pin-your-dependencies
-- 
+- https://stackpython.medium.com/how-to-start-django-project-with-a-database-postgresql-aaa1d74659d8
+- https://www.postgresql.org/download/
+- https://medium.com/@satyarepala/a-comprehensive-guide-to-django-views-understanding-types-and-use-cases-4a02a078ced
+- https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Models
+- https://www.w3schools.com/bootstrap/
+- https://forum.djangoproject.com/t/loading-views-with-javascript/14001
  
 
 
